@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html><head> <title>CommentHelper</title>
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src ="js/jquery-ui.min.js"></script>
+<script src ="js/phrases.js"></script>
+<link rel = "stylesheet" href="js/jquery-ui.min.css">
+<style>
+
+body{
+
+font-family: 'Helvetica'
+
+}
+textarea{
+
+font-size:20px;
+
+}
+</style>
+</head>
+<body>
+
+<textarea id = "common" rows = "10" cols = "40">Enter the text that is common to each set of comments here. This can be inserted into the body of the main comment box below by clicking on the 'Enter Common' button. </textarea>
+
+<button id = "enterCommon">Enter common</button>
+<p></p>
+Enter text here for access to the autocomplete phrases. Hit the right arrow to move the text into the bottom panel.
+<textarea id = "addText" rows = "2" cols = "80" class = "ui-autocomplete-input"></textarea>
+<hr>
+
+<textarea id = "comment" rows = "20" cols = "80" class = "ui-autocomplete-input" autocomplete = "on"></textarea>
+
+</body>
+</html>
+
+<script>
+hasAutocompleted = false;
+String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g,"");
+}
+String.prototype.ltrim = function() {
+	return this.replace(/^\s+/,"");
+}
+String.prototype.rtrim = function() {
+	return this.replace(/\s+$/,"");
+}
+
+// example of using trim, ltrim, and rtrim
+
+
+$(document).ready(function() {
+
+
+
+$('#enterCommon').click(function(e){
+e.preventDefault();
+
+var commonText = $('#common').html();
+
+$('#comment').val(commonText);
+
+
+
+});
+
+$('#addText').keydown(function(e){
+
+  if(e.keyCode == 39)
+     {
+        $('#comment').val(($('#comment').val().rtrim()+' '+$('#addText').val().ltrim()));
+        $('#addText').val('');
+
+     }
+
+
+})
+
+//var commentList = ['takes his time','needs work','has oomph'];
+
+$('#addText').autocomplete({
+minLength:3,
+source: commentList,
+autofocus:true,
+position:{my: "left",at: "top"}
+});
+$('#addText').on('autocomplete',function(e,u){
+
+
+	  $(e.target).parent().find('#comment').val($(e.target).parent().find('#comment').val().rtrim()+' '+u.item.value);
+	  $(e.target).parent().find('#addText').val('');
+
+
+})
+
+$( "#addText" ).autocomplete( "enable" );
+
+
+
+
+
+
+});
+
+</script>
